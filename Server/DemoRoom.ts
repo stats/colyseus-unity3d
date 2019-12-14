@@ -98,6 +98,14 @@ export class DemoRoom extends Room {
       message.str = "sending to a single client";
       this.send(client, message);
     }
+    if ( data === "move_left") {
+      const enemy = new Enemy();
+      enemy.x = 547;
+      enemy.y = 547;
+      let key = generateId();
+      console.log("Adding enemy: ", key)
+      this.state.entities[key] = enemy;
+    }
     console.log(this.state.entities[client.sessionId].x);
 
     this.broadcast({ hello: "hello world" });
@@ -105,6 +113,13 @@ export class DemoRoom extends Room {
 
   update (dt?: number) {
     // console.log("num clients:", Object.keys(this.clients).length);
+    for(let key in this.state.entities) {
+      const enemy = this.state.entities[key];
+      if(enemy.x == 547 && enemy.y == 547) {
+        console.log("Removing enemy", key);
+        delete this.state.entities[key];
+      }
+    }
   }
 
   onDispose () {
